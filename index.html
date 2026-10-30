@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#100b20">
+<title>Mini Insta</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#100b20;color:#fff;font-family:Arial,sans-serif}
+header{background:#1d1430;padding:18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+.logo{font-size:25px;font-weight:900;color:#c69cff}
+main{max-width:650px;margin:auto;padding:14px}
+nav{display:flex;justify-content:space-around;background:#26183b;padding:10px;position:sticky;top:60px;z-index:4}
+nav button{background:transparent;color:#d9c9f0;padding:9px 7px}
+nav button.active{background:#7540c8}
+button{border:0;border-radius:12px;padding:11px 15px;background:#8d50ed;color:white;font-weight:bold;cursor:pointer;margin:3px}
+.card{background:#211735;border:1px solid #392653;border-radius:18px;padding:16px;margin:14px 0}
+h2{color:#d5baff}
+input,textarea{width:100%;padding:13px;margin:7px 0;background:#130d20;color:white;border:1px solid #594176;border-radius:10px}
+textarea{min-height:85px}
+.small{font-size:13px;color:#bcaed0}
+.post-image{width:100%;max-height:420px;object-fit:cover;border-radius:12px;margin-top:10px}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.page{display:none}
+.page.active{display:block}
+.badge{color:#64bdff;font-weight:bold}
+.story-row{display:flex;gap:18px;overflow-x:auto;padding:12px 0}
+.story{text-align:center;font-size:12px;min-width:60px}
+.story img{width:58px;height:58px;border-radius:50%;border:3px solid #a56cff}
+footer{text-align:center;color:#9c8cad;padding:25px;font-size:12px}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="logo">✦ MINI INSTA</div>
+ <span>🌍</span>
+</header>
+
+<nav>
+ <button class="active" onclick="showPage('home',this)">Home</button>
+ <button onclick="showPage('explore',this)">Explore</button>
+ <button onclick="showPage('messages',this)">Chat</button>
+ <button onclick="showPage('profile',this)">Profile</button>
+</nav>
+
+<main>
+
+<section id="home" class="page active">
+ <h2>Welcome to Mini Insta ✨</h2>
+ <p class="small">Your world. Your creativity. Your community.</p>
+
+ <div class="story-row">
+  <div class="story"><img src="https://placehold.co/100x100/7540c8/white?text=+" alt="Your story"><p>Your story</p></div>
+  <div class="story"><img src="https://placehold.co/100x100/9c55ef/white?text=A" alt="Creator"><p>Creators</p></div>
+  <div class="story"><img src="https://placehold.co/100x100/542b91/white?text=B" alt="Friends"><p>Friends</p></div>
+  <div class="story"><img src="https://placehold.co/100x100/7540c8/white?text=C" alt="Community"><p>Community</p></div>
+ </div>
+
+ <div class="card">
+  <h3>✍️ Create a post</h3>
+  <input id="postName" placeholder="Your display name">
+  <textarea id="postText" placeholder="Share something with the world..."></textarea>
+  <input id="postPhoto" placeholder="Public image URL (optional)">
+  <button onclick="addPost()">Share post ✨</button>
+ </div>
+
+ <div id="feed">
+  <div class="card">
+   <strong>Mini Insta Team <span class="badge">✓</span></strong>
+   <p>Welcome to a world of creativity, friendship and discovery! 🌍</p>
+   <img class="post-image" src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=900" alt="Beautiful sunrise">
+   <div class="actions">
+    <button onclick="likePost(this)">♡ Like</button>
+    <button onclick="commentPost(this)">Comment</button>
+    <button onclick="sharePost()">Share</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="explore" class="page">
+ <h2>Explore the world 🌍</h2>
+ <input id="search" placeholder="Search posts..." oninput="searchPosts()">
+ <div class="card">
+  <h3>🔥 Discover topics</h3>
+  <p>#Photography #Music #Travel #Fashion #Technology</p>
+ </div>
+ <div id="exploreFeed"></div>
+</section>
+
+<section id="messages" class="page">
+ <h2>Messages 💬</h2>
+ <div class="card">
+  <p>Start a conversation.</p>
+  <input id="friend" placeholder="Recipient username">
+  <div id="chat" class="small">Your demo messages will appear here.</div>
+  <textarea id="message" placeholder="Write a message..."></textarea>
+  <button onclick="sendMessage()">Send message</button>
+  <p class="small">This is a local demo. Messages are not delivered to other users yet.</p>
+ </div>
+</section>
+
+<section id="profile" class="page">
+ <h2>Your profile 👤</h2>
+ <div class="card">
+  <h3 id="profileName">Mini Insta Member</h3>
+  <p id="profileBio" class="small">Community member</p>
+  <input id="newName" placeholder="Your display name">
+  <textarea id="bio" placeholder="Tell people about yourself"></textarea>
+  <button onclick="saveProfile()">Save profile</button>
+ </div>
+
+ <div class="card">
+  <h3>💙 Get verified</h3>
+  <p>Apply for a Mini Insta verified badge.</p>
+  <input id="verifyName" placeholder="Your full name">
+  <textarea id="verifyReason" placeholder="Why should your account be verified?"></textarea>
+  <button onclick="applyVerification()">Submit application</button>
+  <p id="verifyStatus" class="small"></p>
+  <p class="small">Verification applications require an authorized reviewer. A blue badge is not automatically granted.</p>
+ </div>
+</section>
+
+<footer>Mini Insta © 2026 · Share your world responsibly.</footer>
+</main>
+
+<script>
+function showPage(id,button){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+ button.classList.add('active');
+}
+
+function addPost(){
+ const name=document.getElementById('postName').value.trim()||'Mini Insta Member';
+ const message=document.getElementById('postText').value.trim();
+ const photo=document.getElementById('postPhoto').value.trim();
+ if(!message){alert('Please write something first.');return;}
+ if(photo&&!/^https:\/\//i.test(photo)){alert('Please use a secure HTTPS image link.');return;}
+ const card=document.createElement('div');
+ card.className='card';
+ const title=document.createElement('strong');
+ title.textContent=name+' ';
+ card.appendChild(title);
+ const text=document.createElement('p');
+ text.textContent=message;
+ card.appendChild(text);
+ if(photo){
+  const img=document.createElement('img');
+  img.className='post-image';
+  img.src=photo;
+  img.alt='Post image';
+  img.onerror=()=>img.remove();
+  card.appendChild(img);
+ }
+ const actions=document.createElement('div');
+ actions.className='actions';
+ actions.innerHTML='<button onclick="likePost(this)">♡ Like</button><button onclick="commentPost(this)">Comment</button><button onclick="sharePost()">Share</button>';
+ card.appendChild(actions);
+ document.getElementById('feed').prepend(card);
+ document.getElementById('postText').value='';
+ document.getElementById('postPhoto').value='';
+}
+
+function likePost(button){
+ if(button.dataset.liked==='yes'){
+  button.dataset.liked='no';
+  button.textContent='♡ Like';
+ }else{
+  button.dataset.liked='yes';
+  button.textContent='♥ Liked';
+ }
+}
+
+function commentPost(button){
+ const comment=prompt('Write your comment:');
+ if(comment&&comment.trim()){
+  const p=document.createElement('p');
+  p.className='small';
+  p.textContent='💬 '+comment.trim();
+  button.parentElement.parentElement.appendChild(p);
+ }
+}
+
+function sharePost(){
+ if(navigator.share){
+  navigator.share({title:'Mini Insta',text:'Check out Mini Insta!'});
+ }else{
+  alert('You can share Mini Insta using your browser share menu.');
+ }
+}
+
+function searchPosts(){
+ const query=document.getElementById('search').value.toLowerCase();
+ const posts=document.querySelectorAll('#feed .card');
+ const results=document.getElementById('exploreFeed');
+ results.innerHTML='';
+ posts.forEach(post=>{
+  if(post.innerText.toLowerCase().includes(query)){
+   results.appendChild(post.cloneNode(true));
+  }
+ });
+}
+
+function sendMessage(){
+ const friend=document.getElementById('friend').value.trim();
+ const message=document.getElementById('message').value.trim();
+ if(!friend||!message){alert('Enter a username and message.');return;}
+ const line=document.createElement('p');
+ line.textContent='To '+friend+': '+message;
+ document.getElementById('chat').appendChild(line);
+ document.getElementById('message').value='';
+}
+
+function saveProfile(){
+ const name=document.getElementById('newName').value.trim();
+ const bio=document.getElementById('bio').value.trim();
+ if(name)document.getElementById('profileName').textContent=name;
+ document.getElementById('profileBio').textContent=bio;
+ alert('Profile updated in this demo.');
+}
+
+function applyVerification(){
+ const name=document.getElementById('verifyName').value.trim();
+ const reason=document.getElementById('verifyReason').value.trim();
+ if(!name||!reason){alert('Please complete both fields.');return;}
+ document.getElementById('verifyStatus').textContent='Your demo application has been submitted on this page. It has not been sent to an administrator.';
+}
+</script>
+</body>
+</html>
