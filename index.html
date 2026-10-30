@@ -230,6 +230,30 @@ function applyVerification(){
  if(!name||!reason){alert('Please complete both fields.');return;}
  document.getElementById('verifyStatus').textContent='Your demo application has been submitted on this page. It has not been sent to an administrator.';
 }
+</script><script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL = 'https://skriypqzrvdqwujjtfxa.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_burY4uoy_DFe9XbqyfUoiw_5tcJNoqH';
+
+window.miniInstaDB = createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+console.log('Mini Insta database connection is ready!');
+</script><script type="module">module
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL = 'https://skriypqzrvdqwujjtfxa.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_burY4uoy_DFe9XbqyfUoiw_5tcJNoqH';
+
+window.miniInstaDB = createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+console.log('Mini Insta database connection is ready!');
 </script>
 </body>
 </html>
