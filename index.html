@@ -274,20 +274,31 @@ googleButton.onclick = async () => {
 document.body.appendChild(googleButton);
 
  async function loadMiniInstaProfile() {
-  const { data: { user } } = await window.miniInstaDB.auth.getUser();
+  const { data: { user } } =
+    await window.miniInstaDB.auth.getUser();
 
-  if (user) {
-    const name =
-      user.user_metadata.full_name ||
-      user.user_metadata.name ||
-      'Mini Insta Member';
+  if (!user) return;
 
-    document.getElementById('profileName').textContent = name;
-    document.getElementById('profileBio').textContent = user.email || 'Google account connected';
+  const { data: profile, error } = await window.miniInstaDB
+    .from('profiles')
+    .select('display_name, avatar_url')
+    .eq('id', user.id)
+    .maybeSingle();
 
-    googleButton.textContent = 'Google account connected';
+  if (error) {
+    console.log('Profile loading error:', error.message);
+    return;
+  }
+
+  if (profile) {
+    document.getElementById('profileName').textContent =
+      profile.display_name || user.user_metadata.full_name || 'Mini Insta Member';
+
+    document.getElementById('profileBio').textContent =
+      'Google account connected';
   }
 }
+
 
 loadMiniInstaProfile();
 </script>
