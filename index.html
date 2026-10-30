@@ -242,6 +242,36 @@ window.miniInstaDB = createClient(
 );
 
 console.log('Mini Insta database connection is ready!');
+ // Google sign-in button
+const googleButton = document.createElement('button');
+
+googleButton.textContent = 'Continue with Google';
+
+googleButton.style.cssText = `
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  padding:14px 20px;
+  background:#4285F4;
+  color:white;
+  border:0;
+  border-radius:10px;
+  font-size:16px;
+  z-index:9999;
+`;
+
+googleButton.onclick = async () => {
+  const { error } = await window.miniInstaDB.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: 'https://joebernie.github.io/mini-insta/'
+    }
+  });
+
+  if (error) alert(error.message);
+};
+
+document.body.appendChild(googleButton);
 </script>
 </body>
 </html>
